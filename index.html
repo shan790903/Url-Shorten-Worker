@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>短網址產生器</title>
+</head>
+<body>
+  <h1>短網址產生器</h1>
+  <input type="text" id="urlInput" placeholder="請輸入要縮短的原始網址" size="50" />
+  <button onclick="shortenURL()">產生短網址</button>
+  <p id="result"></p>
+
+  <script>
+    async function shortenURL() {
+      const url = document.getElementById("urlInput").value;
+      const res = await fetch("/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ url })
+      });
+      const result = await res.json();
+      document.getElementById("result").innerHTML =
+        result.key.startsWith("/") ?
+        `短網址：<a href="${result.key}" target="_blank">${location.origin}${result.key}</a>` :
+        `錯誤：${result.key}`;
+    }
+  </script>
+</body>
+</html>
